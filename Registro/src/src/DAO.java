@@ -1,7 +1,7 @@
 package src;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import java.util.*;
 
 public class DAO {
 	public String inserir(Pessoa person) {
@@ -20,5 +20,58 @@ public class DAO {
 		}
 	}//fim do inserir
 	
+	public String listar() {
+		List<Pessoa> lista = new ArrayList<>();
+		String sql = "Select * from pessoa";
+		String msg = "";//guardar todos os dados do banco
+		try(Connection con = Conexao.conectar();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(sql);
+			){
+				while(rs.next()); {
+					Pessoa person = new Pessoa();
+					person.setCod(rs.getString("codigo"));
+					person.setNome(rs.getString("nome"));
+					person.setData(rs.getString("dtNascimento"));
+					msg += "\nCodigo; " + person.getCod() +
+							"\nNome: " + person.getNome() +
+							"\nData Nascimento: " + person.getData();
+					lista.add(person);
+				}
+			}catch(Exception erro) {
+				erro.printStackTrace();
+			}
+		return msg;
+	}//fim do metodo
+	
+	public String atualizar (Pessoa person) {
+		String sql = "Update pessoa set nome = ?, dtNascimento = ? where codigo = ?";
+		try(Connection con = Conexao.conectar();
+			PreparedStatement stmt = con.prepareStatement(sql)
+		){
+			stmt.setString(1, person.getCod());
+			stmt.setString(2, person.getNome());
+			stmt.setString(3, person.getData());
+			
+			stmt.executeUpdate();
+			return "Atualizado!";
+		}catch(Exception erro) {
+			return "Não atualizado\n\n" + erro;
+		}
+	}
+	
+	public String excluir(int codigo) {
+		String sql = "delete from pessoa where codigo = ?";
+		
+		try(Connection con = Conexao.conectar();
+			PreparedStatement stmt = con.prepareStatement(sql)
+		){
+			stmt.setInt(1, codigo);
+			stmt.executeUpdate();
+			return "Excluido";
+		}catch(Exception erro) {
+			return erro + "\n\n Erro!";
+		}
+	}//fim do metodo
 	
 }//DATA ACCESS OBJECT

@@ -6,6 +6,8 @@ public class Pessoa {
 	private int codigo;
 	private String nome;
 	private LocalDate dtNascimento;
+	private String cod;
+	private String data;
 	
 	public Pessoa() {
 		setCodigo(0);
@@ -19,6 +21,27 @@ public class Pessoa {
 		setDataNascimento(dtNascimento);
 	}
 	
+	public Pessoa(String codigo, String nome, String dtNascimento) {
+		this.cod = codigo;
+		this.nome = nome;
+		this.data = dtNascimento;
+	}
+	
+	public String getCod() {
+		return this.cod;
+	}
+	
+	public void setCod(String codigo) {
+		this.cod = codigo;
+	}
+	
+	public String getData() {
+		return this.data;
+	}
+	
+	public void setData(String data) {
+		this.data = data;
+	}
 	
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
